@@ -8,7 +8,7 @@
 function draw(geo_data) {
 	"use strict";
 	var margin = 75,
-		width = 2400 - margin,
+		width = 1000 - margin,
 		height = 600 - margin;
 
 	// On efface la carte SVG précédente
@@ -28,7 +28,7 @@ function draw(geo_data) {
 	  .rotate([-2, 0])
 	  .center([2, 46])
 	  .parallels([29.5, 45.5])
-	  .scale(1000)
+	  .scale(3000)
 	  .translate([width / 2 , height / 2 ])
 	  .precision(.1);
 	//d3.geo.mercator();
@@ -57,12 +57,15 @@ function draw(geo_data) {
 		  .enter()
           .append('path')
 		  .attr('d', path) // path is equivalent to the callback function: function(feature) {return path(feature);})
+		  // Translate dom tom near the franch atlantic coast
+		  .attr('transform', function(d) {
+			return "translate(" + (["200041788", "249720061", "249720053", "249710047", "200041507", "249710070", "249710062", "200044691", "200018653"].includes(d.properties.siren_epci) ? "950 -150" : "0") + ")";})
 		  // Information survol souris
 		  .on("mouseover", function(d) {
 		    div.transition()
 			  .duration(200)
 			  .style("opacity", 1)
-			  .text(d.properties.nom_epci)
+			  .text(d.properties.siren_epci)
 			  .style("left", (d3.event.pageX) + "px")
 			  .style("top", (d3.event.pageY - 30) + "px")
 		  })
